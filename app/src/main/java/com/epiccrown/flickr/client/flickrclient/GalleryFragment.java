@@ -52,6 +52,7 @@ public class GalleryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
+        //PollService.setServiceAlarm(getActivity(),true);
         new FetchItemsTask().execute();
     }
 
@@ -59,6 +60,12 @@ public class GalleryFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search_menu,menu);
+        MenuItem notifications = menu.findItem(R.id.notifications);
+
+        if(PollService.isServiceAlarmOn(getActivity()))
+            notifications.setIcon(R.drawable.notifications_off);
+        else
+            notifications.setIcon(R.drawable.notifications_on);
 
         MenuItem menuItem = menu.findItem(R.id.app_bar_search);
 
@@ -127,6 +134,11 @@ public class GalleryFragment extends Fragment {
         switch (id){
             case R.id.serach_clear:
                 MyPreferences.setStoredQuery(getActivity(),null);
+                return true;
+            case R.id.notifications:
+                boolean shouldStart = !PollService.isServiceAlarmOn(getActivity());
+                PollService.setServiceAlarm(getActivity(),shouldStart);
+                getActivity().invalidateOptionsMenu();
                 return true;
         }
         return super.onOptionsItemSelected(item);

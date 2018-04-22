@@ -11,6 +11,7 @@ import java.util.prefs.PreferencesFactory;
 
 public class MyPreferences {
     public static final String TAG = "searchHistory";
+    private static final String PREF_LAST_RESULT_ID = "pollService";
 
     public static String getStoredQuery(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context)
@@ -23,4 +24,16 @@ public class MyPreferences {
                 .putString(TAG,query)
                 .apply();
     }
+
+    public static String getLastResultId(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(PREF_LAST_RESULT_ID, null);
+    }
+    public static void setLastResultId(Context context, String lastResultId) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(PREF_LAST_RESULT_ID, lastResultId)
+                .apply();
+    }
+
 }

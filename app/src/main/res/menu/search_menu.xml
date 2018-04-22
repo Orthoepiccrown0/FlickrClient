@@ -13,5 +13,10 @@
         android:id="@+id/serach_clear"
         android:title="Clear Search"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/notifications_on"
+        android:title="on/off notifications"
+        app:showAsAction="always" />
 
 </menu>
