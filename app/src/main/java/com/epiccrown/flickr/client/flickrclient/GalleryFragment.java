@@ -29,7 +29,7 @@ import java.util.List;
  * Created by Epiccrown on 11.04.2018.
  */
 
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends VisibleFragment {
     RecyclerView mRecycler;
     PhotoAdapter mAdapter;
     FloatingActionButton fb;
@@ -150,7 +150,7 @@ public class GalleryFragment extends Fragment {
         View v = inflater.inflate(R.layout.gallery_fragment, null);
 
         mRecycler = v.findViewById(R.id.recycler);
-        mRecycler.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -268,15 +268,18 @@ public class GalleryFragment extends Fragment {
 
             if (gallery_items == null) {
                 gallery_items = galleryItems;
-                current_gallery_size = gallery_items.size();
+
                 setupAdapter();
                 progressBar.setVisibility(View.GONE);
             } else {
-                current_gallery_size = gallery_items.size();
+
                 gallery_items = galleryItems;
                 setupAdapter();
                 progressBar.setVisibility(View.GONE);
             }
+
+            if(galleryItems!=null&&!galleryItems.isEmpty())
+                current_gallery_size = gallery_items.size();
             isLoading = false;
         }
     }

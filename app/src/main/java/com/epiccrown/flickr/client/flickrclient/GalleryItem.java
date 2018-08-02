@@ -1,5 +1,8 @@
 package com.epiccrown.flickr.client.flickrclient;
 
+import android.app.UiAutomation;
+import android.net.Uri;
+
 /**
  * Created by Epiccrown on 11.04.2018.
  */
@@ -8,6 +11,7 @@ public class GalleryItem {
     private String mCaption;
     private String mId;
     private String mURL;
+    private String mOwner;
 
     public GalleryItem() {
     }
@@ -40,6 +44,24 @@ public class GalleryItem {
 
     public void setmURL(String mURL) {
         this.mURL = mURL;
+    }
+
+    public String getmOwner() {
+        return mOwner;
+    }
+
+    public void setmOwner(String mOwner) {
+        this.mOwner = mOwner;
+    }
+
+    public Uri generateLink(){
+        Uri uri = Uri.parse("http://www.flickr.com/photos/")
+                .buildUpon()
+                .appendPath(getmOwner())
+                .appendPath(getmId())
+                .build();
+
+        return uri;
     }
 
     @Override

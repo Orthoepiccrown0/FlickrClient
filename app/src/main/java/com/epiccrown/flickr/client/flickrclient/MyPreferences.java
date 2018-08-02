@@ -11,6 +11,7 @@ import java.util.prefs.PreferencesFactory;
 
 public class MyPreferences {
     public static final String TAG = "searchHistory";
+    public static final String IsAlarmOn = "alarmOn";
     private static final String PREF_LAST_RESULT_ID = "pollService";
 
     public static String getStoredQuery(Context context){
@@ -33,6 +34,18 @@ public class MyPreferences {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREF_LAST_RESULT_ID, lastResultId)
+                .apply();
+    }
+
+    public static boolean getAlarmOn(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(IsAlarmOn, false);
+    }
+
+    public static void setAlarm(Context context, boolean alasmOn){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(IsAlarmOn, alasmOn)
                 .apply();
     }
 

@@ -1,5 +1,6 @@
 package com.epiccrown.flickr.client.flickrclient;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -18,7 +19,17 @@ import java.util.List;
 
 public class PollService extends IntentService {
 
-    private static final long POLL_INTERVAL = 1000 * 60;
+    //private static final long POLL_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+    private static final long POLL_INTERVAL = 6000*10;
+
+    public static final String ACTION_SHOW_NOTIFICATION =
+            "com.bignerdranch.android.photogallery.SHOW_NOTIFICATION";
+    public static final String PERM_PRIVATE =
+            "com.bignerdranch.android.photogallery.PRIVATE";
+    public static final String REQUEST_CODE = "REQUEST_CODE";
+    public static final String NOTIFICATION = "NOTIFICATION";
+
+
 
     public static Intent newIntent(Context context) {
         return new Intent(context, PollService.class);
@@ -53,18 +64,18 @@ public class PollService extends IntentService {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, "Flickr Client", importance);
-                 notification = new NotificationCompat.Builder(this)
+                 notification = new Notification.Builder(this)
                         .setTicker("Check out new photos on Flickr!")
                         .setSmallIcon(R.drawable.new_photos)
                         .setContentTitle("FlickrClient")
                         .setContentText("Check out new photos on Flickr!")
                         .setContentIntent(pi)
-                         .setChannelId(CHANNEL_ID)
+                        .setChannelId(CHANNEL_ID)
                         .setAutoCancel(true)
                         .build();
                 mNotificationManager.createNotificationChannel(mChannel);
             }else{
-                 notification = new NotificationCompat.Builder(this)
+                 notification = new Notification.Builder(this)
                         .setTicker("Check out new photos on Flickr!")
                         .setSmallIcon(R.drawable.new_photos)
                         .setContentTitle("FlickrClient")
@@ -75,12 +86,23 @@ public class PollService extends IntentService {
             }
 
 
-            mNotificationManager.notify(0, notification);
-
+            //mNotificationManager.notify(0, notification);
+//            sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION));
+            showBackgroundNotification(0,notification);
         }
         MyPreferences.setLastResultId(this, resultId);
 
     }
+
+    private void showBackgroundNotification(int requestCode,
+                                            Notification notification) {
+        Intent i = new Intent(ACTION_SHOW_NOTIFICATION);
+        i.putExtra(REQUEST_CODE, requestCode);
+        i.putExtra(NOTIFICATION, notification);
+        sendOrderedBroadcast(i, PERM_PRIVATE, null, null,
+                Activity.RESULT_OK, null, null);
+    }
+
 
     private boolean isNetworkAvailableAndConnected() {
 
@@ -104,6 +126,7 @@ public class PollService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+        MyPreferences.setAlarm(context,isOn);
     }
 
     public static boolean isServiceAlarmOn(Context context) {

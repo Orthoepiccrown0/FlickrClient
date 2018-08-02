@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class URLRequestToString {
 
                 item.setmCaption(jsonObject.getString("title"));
                 item.setmId(jsonObject.getString("id"));
-
+                item.setmOwner(jsonObject.getString("owner"));
                 if(!jsonObject.has("url_s")) continue;
 
                 item.setmURL(jsonObject.getString("url_s"));
